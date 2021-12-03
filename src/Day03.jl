@@ -1009,7 +1009,7 @@ function maxminbitfreq(arr)
         positioncounts .+= line
     end
     gam = [positioncounts[i] / length(arr) >= 0.5 ? 1 : 0 for i in 1:length(first(arr))]
-    eps = [positioncounts[i] / length(arr) < 0.5 ? 1 : 0 for i in 1:length(first(arr))]
+    eps = [!Bool(x) for x in gam]
     return gam, eps
 end
 
