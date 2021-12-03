@@ -1,4 +1,4 @@
-# Advent of code 2021, day 1
+# Advent of code 2021, day 2
 
 input2 = split("""
 forward 2
