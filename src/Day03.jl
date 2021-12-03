@@ -1,4 +1,4 @@
-# Advent of code 2021, day 1
+# Advent of code 2021, day 3
 
 input3 = [[c == '0' ? 0 : 1 for c in s] for s in split(strip("""
 101011111001
