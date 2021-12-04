@@ -1,2 +1,1 @@
-lines = readlines("AoCdata/AoC_2021_day4.txt")
-input4 = []
+const input4 = [for line in readlines("AoCdata/AoC_2021_day4.txt")]
