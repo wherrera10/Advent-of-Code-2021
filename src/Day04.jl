@@ -19,7 +19,7 @@ function parseinput()
 end
 
 function part1and2()
-    win(mat) = any(i -> sum(mat[i, 1:5]) == 5 || sum(mat[1:5, i]) == 5, 1:5)
+    win(mat) = any(sum(mat, dims = 1) .== 5) || any(sum(mat, dims = 2) .== 5)
     draw, mats, picks = parseinput()
     totalwinners, part1, winners, pastwinners = 0, 0, Int[], Int[]
     for d in draw
