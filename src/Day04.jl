@@ -6,7 +6,6 @@ function parseinput()
     matrices, picks = Matrix{Int}[], Matrix{Int}[]
     curline = 3
     while curline <= length(lines)
-        row = 1
         mat = zeros(Int, 5, 5)
         push!(picks, zeros(Int, 5, 5))
         for row in 1:5
