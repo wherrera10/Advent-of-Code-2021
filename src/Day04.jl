@@ -1,19 +1,12 @@
 # Advent of code 2021, day 4
 
 function parseinput()
-    lines = readlines("AoCdata/AoC_2021_day4.txt")
-    draworder = [parse(Int, num) for num in split(strip(first(lines)), ",")]
+    paragraphs = split(strip(read("AoCdata/AoC_2021_day4.txt", String)), "\n\n")
+    draworder = [parse(Int, num) for num in split(strip(first(paragraphs)), ",")]
     matrices, picks = Matrix{Int}[], Matrix{Int}[]
-    curline = 3
-    while curline <= length(lines)
-        mat = zeros(Int, 5, 5)
+    for mattxt in paragraphs[begin+1:end]
+        push!(matrices, reshape([parse(Int, s) for s in split(strip(mattxt))]', (5, 5)))
         push!(picks, zeros(Int, 5, 5))
-        for row in 1:5
-            mat[row, :] .= [parse(Int, s) for s in split(strip(lines[curline]))]
-            curline += 1
-        end
-        push!(matrices, mat)
-        curline += 1
     end
     return draworder, matrices, picks
 end
