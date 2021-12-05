@@ -28,3 +28,5 @@ end
 
 println("Part 1: ", multicrossings(true))
 println("Part 2: ", multicrossings(false))
+
+        
