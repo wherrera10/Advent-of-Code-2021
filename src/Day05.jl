@@ -23,7 +23,7 @@ function multicrossings(nodiags = true)
     for segment in parseinput(), p in allpoints(segment, nodiags)
         pointcounts[p] = haskey(pointcounts, p) ? pointcounts[p] + 1 : 1
     end
-    return count(p[2] > 1 for p in pointcounts)
+    return count(values(pointcounts) .> 1)
 end
 
 println("Part 1: ", multicrossings(true))
