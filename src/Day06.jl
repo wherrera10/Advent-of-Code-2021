@@ -2,7 +2,7 @@
 
 function parseinput(fname = "AoCdata/AoC_2021_day6.txt")
    input6 = read(fname, String)
-   return [parse(Int8, x) for x in strip.(split(input6, ",")) if !isempty(input6)]
+   return [parse(Int8, x) for x in strip.(split(input6, ",")) if !isempty(x)]
 end
 
 function simulation(lfvec, days)
