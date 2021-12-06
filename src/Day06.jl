@@ -5,7 +5,7 @@ function parseinput(fname = "AoCdata/AoC_2021_day6.txt")
    return [parse(Int8, x) for x in strip.(split(input6, ",")) if !isempty(input6)]
 end
 
-function simulation!(lfvec, days)
+function simulation(lfvec, days)
     numeach = zeros(Int, 9)
     for n in lfvec
         numeach[n + 1] += 1
@@ -17,6 +17,6 @@ function simulation!(lfvec, days)
     return sum(numeach)
 end
 
-@show simulation!(parseinput(), 80)
-@show simulation!(parseinput(), 256)
+@show simulation(parseinput(), 80)
+@show simulation(parseinput(), 256)
 
