@@ -50,7 +50,6 @@ posvec = [
     435,1273,38,147,214,362,1,95,87,724,1126,807,378,105,89,276,1076,107,552,1082,32,896,
     202,177,946,753,1106,464,72,61,225,55]
 
-movecostpart2(n) = sum(1:n)
 movementcosts = [(n, sum([abs(n - p) for p in posvec])) for n in 1:maximum(posvec)]
 movementcosts2 = [(n, sum([sum(1:abs(n - p)) for p in posvec])) for n in 1:maximum(posvec)]
 println("Part 1: ", first(findmin(x -> last(x), movementcosts)))
