@@ -1,4 +1,4 @@
-let
+function day8()
     day8lines = filter(!isempty, strip.(readlines("AoCdata/AoC_2021_day8.txt")))
     part = [0, 0]
 
@@ -13,7 +13,7 @@ let
     eachlinedig = Vector{String}[]
     for line in patterns
         dig = ["" for _ in 1:10]
-        while any(x -> x == "", dig)
+        while any(dig .== "")
             for s in vcat(line...)
                 length(s) == 2 && (dig[2] = s) # 1
                 length(s) == 3 && (dig[8] = s) # 7
@@ -34,11 +34,13 @@ let
                 elseif length(s) == 5  # 2 or 3 or 5
                     if dig[2] != ""
                         if count(c -> c in s, dig[2]) == 2
-                            dig[4] = s     # 3
-                        elseif dig[5] != "" && count(c -> c in s, dig[5]) == 3
-                            dig[6] = s # 5
-                        else
-                            dig[3] = s # 2
+                            dig[4] = s # 3
+                        elseif dig[5] != ""
+                            if count(c -> c in s, dig[5]) == 3
+                                dig[6] = s # 5
+                            else
+                                dig[3] = s # 2
+                            end
                         end
                     end
                 end
@@ -56,3 +58,4 @@ let
     println("Part 2:", part[2])
 end
 
+day8()
