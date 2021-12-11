@@ -25,14 +25,14 @@ function day11()
     for step in 1:1000
         mat .+= 1
         while any(mat .> 9)
-            for i in 1:nrows, j in 1:ncols
-                if mat[i, j] > 9
-                    for k in max(1,i-1):min(i+1,nrows), l in max(j-1,1):min(j+1,ncols)
+            for c in CartesianIndices(mat)
+                if mat[c] > 9
+                    for k in max(1,c[1]-1):min(c[1]+1,nrows), l in max(c[2]-1,1):min(c[2]+1,ncols)
                         if mat[k, l] > 0
                             mat[k, l] += 1
                         end
                     end
-                    mat[i, j] = -1
+                    mat[c] = -1
                     step < 101 && (part[1] += 1)
                 end
             end
@@ -55,5 +55,5 @@ println("Part 2:", part[2])
 #=
 Part 1:1601
 Part 2:368
-  16.515 ms (188190 allocations: 6.12 MiB)
+7.582 ms (86608 allocations: 3.02 MiB)
 =#
