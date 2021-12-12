@@ -45,6 +45,7 @@ function day12()
         end
     end
 
+    """ recursive depth first search """
     function allpaths(startvertex, currentpath, doublecaveok)
         startvertex == "end" && return [currentpath]
         a = Vector{String}[]
