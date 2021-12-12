@@ -25,6 +25,16 @@ QW-dz
 ps-dz
 """
 
+function day12()
+    part = [0, 0]
+    day12lines = filter(!isempty, strip.(split(data12, "\n")))
+    vertices = Dict{String, Vector{String}}()
+    for line in day12lines
+        v1, v2 = split(line, "-")
+        push!(get!(vertices, v1, String[]), v2)
+        push!(get!(vertices, v2, String[]), v1)
+    end
+
     """ recursive depth first search """
     function allpaths(startvertex, currentpath, part1 = true)
         startvertex == "end" && return [currentpath]
@@ -40,8 +50,8 @@ ps-dz
         return paths
     end
 
-    part[1] = length(allpaths("start", ["start"], false))
-    part[2] = length(allpaths("start", ["start"], true))
+    part[1] = length(allpaths("start", ["start"]))
+    part[2] = length(allpaths("start", ["start"], false))
 
     return part
 end
