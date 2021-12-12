@@ -37,7 +37,7 @@ function day11()
                 end
             end
         end
-        if all(==(mat[1,1]), mat)
+        if all(==(first(mat)), mat)
             part[2] == 0 && (part[2] = step)
             step >= 100 && break
         end
