@@ -25,6 +25,21 @@ QW-dz
 ps-dz
 """
 
+""" recursive depth first search """
+function allpaths(dverts, startvertex, currentpath, part1 = true)
+    startvertex == "end" && return [currentpath]
+    paths = Vector{String}[]
+    for nextvertex in dverts[startvertex]
+        nextvertex == "start" && continue
+        if isuppercase(first(nextvertex)) || !(nextvertex in currentpath)
+            append!(paths, allpaths(dverts, nextvertex, vcat(currentpath, [nextvertex]), part1))
+        elseif !part1 && islowercase(first(nextvertex))
+            append!(paths, allpaths(dverts, nextvertex, vcat(currentpath, [nextvertex])))
+        end
+    end
+    return paths
+end
+
 function day12()
     part = [0, 0]
     day12lines = filter(!isempty, strip.(split(data12, "\n")))
@@ -35,24 +50,8 @@ function day12()
         push!(get!(vertices, v2, String[]), v1)
     end
 
-    """ recursive depth first search """
-    function allpaths(startvertex, currentpath, part1 = true)
-        startvertex == "end" && return [currentpath]
-        paths = Vector{String}[]
-        for nextvertex in vertices[startvertex]
-            nextvertex == "start" && continue
-            if isuppercase(first(nextvertex)) || !(nextvertex in currentpath)
-                append!(paths, allpaths(nextvertex, vcat(currentpath, [nextvertex]), part1))
-            elseif !part1 && islowercase(first(nextvertex))
-                append!(paths, allpaths(nextvertex, vcat(currentpath, [nextvertex])))
-            end
-        end
-        return paths
-    end
-
-    part[1] = length(allpaths("start", ["start"]))
-    part[2] = length(allpaths("start", ["start"], false))
-
+    part[1] = length(allpaths(vertices, "start", ["start"]))
+    part[2] = length(allpaths(vertices, "start", ["start"], false))
     return part
 end
 
