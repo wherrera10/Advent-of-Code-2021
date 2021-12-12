@@ -32,15 +32,14 @@ function day11()
                             mat[k, l] += 1
                         end
                     end
-                    mat[c] = -1
+                    mat[c] = 0
                     step < 101 && (part[1] += 1)
                 end
             end
         end
-        mat .= map(n -> n == -1 ? 0 : n, mat)
         if all(==(mat[1,1]), mat)
-            part[2] = step
-            break
+            part[2] == 0 && (part[2] = step)
+            step >= 100 && break
         end
     end
     return part
@@ -55,5 +54,5 @@ println("Part 2:", part[2])
 #=
 Part 1:1601
 Part 2:368
-7.582 ms (86608 allocations: 3.02 MiB)
+  7.539 ms (86240 allocations: 2.71 MiB)
 =#
