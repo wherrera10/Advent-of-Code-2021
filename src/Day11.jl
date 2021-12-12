@@ -18,7 +18,7 @@ function day11()
     day11lines = filter(!isempty, strip.(split(data11, "\n")))
     nrows, ncols = length(day11lines), length(first(day11lines))
     mat = zeros(Int, nrows, ncols)
-    for i in 1:size(mat)[1]
+    for i in 1:nrows
         mat[i, :] .= parse.(Int, collect(day11lines[i]))
     end
 
