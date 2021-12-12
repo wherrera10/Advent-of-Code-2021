@@ -50,9 +50,9 @@ function day12()
         for nextvertex in vertices[startvertex]
             nextvertex == "start" && continue
             if isuppercase(first(nextvertex)) || !(nextvertex in currentpath)
-                append!(a, allpaths(nextvertex, vcat(currentpath, [nextvertex]), doublecaveok))
-            elseif doublecaveok && islowercase(first(nextvertex))
-                append!(a, allpaths(nextvertex, vcat(currentpath, [nextvertex]), false))
+                append!(a, allpaths(nextvertex, vcat(currentpath, [nextvertex]), part1))
+            elseif !part1 && islowercase(first(nextvertex))
+                append!(a, allpaths(nextvertex, vcat(currentpath, [nextvertex])))
             end
         end
         return a
