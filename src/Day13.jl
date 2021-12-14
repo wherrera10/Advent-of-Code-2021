@@ -32,7 +32,7 @@ function day13(printoutput = true)
     end
     mat = fill('.', maximum([first(d) for d in dots]), maximum([last(d) for d in dots]))
     for d in CartesianIndices(mat)
-        (d[1], d[2]) in dots && (mat[d] = '#')
+       Tuple(d) in dots && (mat[d] = '#')
     end
 
     if printoutput
