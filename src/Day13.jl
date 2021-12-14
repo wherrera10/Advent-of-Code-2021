@@ -13,14 +13,14 @@ function day13(printoutput = true)
     end
 
     for (i, fold) in enumerate(folds)
-        if first(fold) == 'y'  # fold up
+        if first(fold) == 'y'  # fold in half horizontally lifting bottom edge up and folding down toward top
             for d in dots
                 if last(d) > last(fold)
                     delete!(dots, d)
                     push!(dots, (first(d), 2 * last(fold) - last(d) + 2))
                 end
             end
-        else
+                else           # fold in half vertically lifting right edge up and to left
             for d in dots
                 if first(d) > last(fold)
                     delete!(dots, d)
