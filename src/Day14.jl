@@ -2,7 +2,7 @@ using BenchmarkTools
 
 struct Polymer
     init::String
-    rules::Dict{String, Char}
+    rules::Dict{String, Tuple{String, String}}
 end
 
 function Base.iterate(p::Polymer, state=Dict{String, Int}())
@@ -13,8 +13,8 @@ function Base.iterate(p::Polymer, state=Dict{String, Int}())
     tmpdict = Dict{String, Int}()
     for (k, v) in state
         if haskey(p.rules, k)
-            tmpdict[k[begin] * p.rules[k]] = get!(tmpdict, k[begin] * p.rules[k], 0) + v
-            tmpdict[p.rules[k] * k[end]] = get!(tmpdict, p.rules[k] * k[end], 0) + v
+            tmpdict[first(p.rules[k])] = get!(tmpdict, first(p.rules[k]), 0) + v
+            tmpdict[last(p.rules[k])] = get!(tmpdict, last(p.rules[k]), 0) + v
         else
             tmpdict[k] = get!(tmpdict, k, 0) + v
         end
@@ -32,7 +32,7 @@ function day14()
     part = [0, 0]
     lines = strip.(readlines("AoCdata/AoC_2021_day14.txt"))
     template, rulelines = lines[begin], lines[begin+2:end]
-    rules = Dict(s[begin:begin+1] => s[end] for s in rulelines)
+    rules = Dict(s[begin:begin+1] => (s[begin]*s[end], s[end]* s[begin+1]) for s in rulelines)
 
     poly = Polymer(template, rules)
     for (i, diff) in enumerate(poly)
@@ -56,5 +56,5 @@ println("Part 2: ", part[2])
 #=
 Part 1: 2170
 Part 2: 2422444761283
-1.053 ms (11916 allocations: 637.75 KiB)
+  851.600 μs (1004 allocations: 303.16 KiB)
 =#
