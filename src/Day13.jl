@@ -1,9 +1,9 @@
 using BenchmarkTools
 
 function day13(printoutput = true)
-    folds = Tuple{Char, Int}[]
     dots = Set{Tuple{Int, Int}}()
-    for line in filter(!isempty, strip.(readlines("AoCdata/day13.txt")))
+    folds = Tuple{Char, Int}[]
+    for line in filter(!isempty, strip.(readlines("AoCdata/AoC_2021_day13.txt")))
         left, right = split(line, r"[ =,]")[end-1:end]
         if left in ["x", "y"]
             push!(folds, (first(left), parse(Int, right)))
@@ -30,20 +30,11 @@ function day13(printoutput = true)
         end
         printoutput && i == 1 && println("Part 1: ", length(dots))
     end
-    mat = fill('.', maximum([first(d) for d in dots]), maximum([last(d) for d in dots]))
+    mat = fill(". ", maximum([first(d) for d in dots]), maximum([last(d) for d in dots]))
     for d in CartesianIndices(mat)
-       Tuple(d) in dots && (mat[d] = '#')
+       Tuple(d) in dots && (mat[d] = "# ")
     end
-
-    if printoutput
-        println("Part 2 graphic:")
-        for line in eachcol(mat)
-            for ch in line
-                print("$ch ")
-            end
-            println()
-        end
-    end
+    printoutput && println("Part 2 graphic:\n", join([prod(line) for line in eachcol(mat)], "\n"))
 
 end
 
@@ -54,12 +45,12 @@ day13()
 #=
 Part 1: 724
 Part 2 graphic:
-. # # . . # # # . . . . # # . # # # . . # # # # . # # # . . # . . # . # . . . 
-# . . # . # . . # . . . . # . # . . # . # . . . . # . . # . # . . # . # . . . 
-# . . . . # . . # . . . . # . # # # . . # # # . . # . . # . # . . # . # . . . 
-# . . . . # # # . . . . . # . # . . # . # . . . . # # # . . # . . # . # . . . 
-# . . # . # . . . . # . . # . # . . # . # . . . . # . # . . # . . # . # . . . 
-. # # . . # . . . . . # # . . # # # . . # # # # . # . . # . . # # . . # # # # 
-  1.541 ms (5296 allocations: 583.14 KiB)
+. # # . . # # # . . . . # # . # # # . . # # # # . # # # . . # . . # . # . . .
+# . . # . # . . # . . . . # . # . . # . # . . . . # . . # . # . . # . # . . .
+# . . . . # . . # . . . . # . # # # . . # # # . . # . . # . # . . # . # . . .
+# . . . . # # # . . . . . # . # . . # . # . . . . # # # . . # . . # . # . . .
+# . . # . # . . . . # . . # . # . . # . # . . . . # . # . . # . . # . # . . .
+. # # . . # . . . . . # # . . # # # . . # # # # . # . . # . . # # . . # # # #
+  1.034 ms (5295 allocations: 583.92 KiB)
 =#
-        
+
