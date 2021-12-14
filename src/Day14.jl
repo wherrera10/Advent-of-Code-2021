@@ -23,7 +23,7 @@ function day14()
             paircounts = tmpdict
         end
         for (k, v) in paircounts
-            lettercounts[Int(k[begin]) - Int('A') + 1] += v
+            lettercounts[k[begin] - 'A' + 1] += v
         end
         filter!(k -> k > 0, lettercounts)
         return maximum(lettercounts) - minimum(lettercounts)
