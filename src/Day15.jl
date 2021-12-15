@@ -45,4 +45,3 @@ part = day15()
 println("Part 1: ", part[1])
 println("Part 2: ", part[2])
 
-@time day15()
