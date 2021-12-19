@@ -65,6 +65,7 @@ magnitude(s::String) = magnitude(eval(Meta.parse(s)))
 snailcheck(list) = magnitude(listadd(list))
 
 function day18()
+    lines = strip.(readlines("AoCdata/AoC_2021_day18.txt"))
     part = [0, 0]
     part[1] = snailcheck(lines)
     checksums = Int[]
@@ -72,7 +73,8 @@ function day18()
         x == y && continue
         push!(checksums, snailcheck([x, y]))
     end
-    part[2] = maximum(part2)
+    part[2] = maximum(checksums)
+    return part
 end
 
 part = day18()
@@ -80,5 +82,3 @@ println("Part 1: ", part[1])
 println("Part 2: ", part[2])
 
 @btime day18()
-
-  
