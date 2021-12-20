@@ -1,3 +1,5 @@
+const Op = NTuple{9, Int}
+
 function day19()
     part = [0, 0]
     maxdist = 1000
@@ -14,6 +16,7 @@ function day19()
     for i in 1:nscan
         print("Test $i\b\b\b\b\b\b\b\b\b")
         mat = sort(scanners[i])
+        foundmatch = false
         for j in i+1:nscan
             for xsign in [1, -1], ysign in [1, -1], zsign in [1, -1], ax in ([1,2,3], [2,1,3], [3,2,1], [1,3,2], [2,3,1], [3,1,2])
                 newmat = deepcopy(scanners[j])
@@ -24,16 +27,21 @@ function day19()
                     newmat[i] .= [t[ax[1]], t[ax[2]], t[ax[3]]]
                 end
                 for b in mat, t in newmat
-                    diff = b .- t
-                    samediffs = count(mat[n] - newmat[m] == diff for n in 1:length(mat), m in 1:length(newmat))
-                    if samediffs > 8
+                    diff = t .- b
+                    samediffs = count(newmat[n] - mat[m] == diff for n in 1:length(mat),
+                       m in 1:length(newmat))
+                    if samediffs > 11
                         overlaps[[i, j]] = max(get(overlaps, [i, j], 0), samediffs)
-                        deltas[[i, j]] = -diff
-                        deltas[[j, i]] = diff
+                        deltas[[i, j]] = Op(xsign, ysign, zsign, ax[1], ax[2], ax[3], 
+                           diff[1], diff[2], diff[3]])
+                        deltas[[j, i]] = Op(Op(xsign, ysign, zsign, ax[1], ax[2], ax[3], 
+                        -diff[1], -diff[2], -diff[3]]))
+                        goto gotfoundmatch
                     end
                 end
             end
         end
+        label gotfoundmatch
     end
 
     distances = Dict(1 => [0, 0, 0])
