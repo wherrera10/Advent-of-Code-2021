@@ -54,17 +54,17 @@ function day19()
             scanners[k][i] .-= v
         end
     end
-    # number of beacons = total readings minus number of overlappings (beacons seen by two scanners)
-    allmeasures = vcat([v for v in scanners]...)
+    # number of beacons = total readings - number of overlapping readings + number of doublecounts
+    allmeasures = vcat(scanners)
     overlappings = length(overlaps)
     part[1] = length(unique(allmeasures)) - overlappings
-
+@show length(allmeasures), length(unique(allmeasures)), overlappings, sum(values(overlaps))
     manhat(s1, s2) = sum(abs.(distances[s2] - distances[s1]))
-    part[2] = maximum(manhat(distances[i], distances[j]) for i in 1:nscan, j in 1:nscan)
+    part[2] = maximum(manhat(i, j) for i in 1:nscan, j in 1:nscan)
 
     return part
 end
 
 part = day19()
-println("\nPart 1: ", part[1])
-println("Part 2: ", part[2])
+println("\nPart 1: ", part[1])  # 425
+println("Part 2: ", part[2])    # 13354
