@@ -4,7 +4,7 @@ rolloutcomes = [[3, 1], [4, 3], [5, 6], [6, 7], [7, 6], [8, 3], [9, 1]]
 function roll1000()
     detdie(idx) = 3 * (3 * mod1(idx, 100) - 1)
     scorespart1 = [0, 0]
-    positionspart1 = pos
+    positionspart1 = deepcopy(pos)
     won = [false, false]
     round = 0
     while !won[1] && !won[2]
