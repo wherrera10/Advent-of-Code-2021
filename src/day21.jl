@@ -38,4 +38,4 @@ function winners(player1, r1, player2, r2)
 end
 
 wins1, wins2 = winners(pos[1] - 1, 21, pos[2] - 1, 21)
-println(Part 2: max(wins1, wins2))
+println("Part 2: ", max(wins1, wins2))
