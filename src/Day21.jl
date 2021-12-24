@@ -1,4 +1,4 @@
-pos = [6, 2]
+pos = [6, 2]  # input position here
 rolloutcomes = [[3, 1], [4, 3], [5, 6], [6, 7], [7, 6], [8, 3], [9, 1]]
 
 function roll1000()
