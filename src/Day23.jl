@@ -44,7 +44,6 @@ function day23(part1 = true)
         original[3, :] .= collect(insertstring[1:11])
         original[4, :] .= collect(insertstring[13:23])
         target = [target[1:3, :]; target[2:3, :]]
-        println(length(original))
     end
 
     amphitypes = ['A', 'B', 'C', 'D']
