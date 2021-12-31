@@ -1,6 +1,6 @@
 using BenchmarkTools
 
-""" Speedup: if we fail to pop a 36-multiplier due to bad input, z becomes large, so drop those"""
+""" Speedup: if we fail to pop a 26-multiplier due to bad input, z becomes large, so drop those"""
 function day24()
     rstates = rstates = [[[0, 0, 0, 0], [0, 0]]]
     lines = readlines("AoCdata/AoC_2021_day24.txt")
