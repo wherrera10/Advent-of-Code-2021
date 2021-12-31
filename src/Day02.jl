@@ -1,6 +1,7 @@
 # Advent of code 2021, day 2
 
-input2 = split("""
+input2 = split(
+    """
 forward 2
 down 1
 down 7
@@ -1000,7 +1001,9 @@ up 7
 forward 4
 forward 2
 down 7
-forward 2""", "\n")
+forward 2""",
+    "\n",
+)
 
 function parseline(line)
     direction, distance = split(strip(line))

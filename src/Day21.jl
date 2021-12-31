@@ -26,11 +26,13 @@ println("Part 1: ", roll1000())
 
 function winners(player1, r1, player2, r2)
     if r2 <= 0
-        return (0,1)
+        return (0, 1)
     end
-    wins1, wins2 = 0,0
+    wins1, wins2 = 0, 0
     for (roll, result) in rolloutcomes
-        unis2, unis1 = winners(player2, r2, (player1 + roll) % 10, r1 - 1 - (player1 + roll) % 10)
+        unis2, unis1 = winners(
+            player2, r2, (player1 + roll) % 10, r1 - 1 - (player1 + roll) % 10
+        )
         wins1 += result * unis1
         wins2 += result * unis2
     end

@@ -6,7 +6,10 @@ function multicrossings(fname, countdiagonals)
         x1, y1, x2, y2 = map(s -> parse(Int, s), txtsegment)
         xsign, ysign = sign(x2 - x1), sign(y2 - y1)
         if xsign * ysign == 0 || countdiagonals
-            for p in [[x1 + xsign * i, y1 + ysign * i] for i in 0: abs(xsign == 0 ? y1 - y2 : x1 - x2)]
+            for p in [
+                [x1 + xsign * i, y1 + ysign * i] for
+                i in 0:abs(xsign == 0 ? y1 - y2 : x1 - x2)
+            ]
                 grid[first(p), last(p)] += 1
             end
         end
@@ -16,4 +19,3 @@ end
 
 println("Part 1: ", multicrossings("AoCdata/AoC_2021_day5.txt", false))
 println("Part 2: ", multicrossings("AoCdata/AoC_2021_day5.txt", true))
-

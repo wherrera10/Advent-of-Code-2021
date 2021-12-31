@@ -1,8 +1,8 @@
 # Advent of code 2021, day 6
 
-function parseinput(fname = "AoCdata/AoC_2021_day6.txt")
-   input6 = read(fname, String)
-   return [parse(Int8, x) for x in strip.(split(input6, ",")) if !isempty(x)]
+function parseinput(fname="AoCdata/AoC_2021_day6.txt")
+    input6 = read(fname, String)
+    return [parse(Int8, x) for x in strip.(split(input6, ",")) if !isempty(x)]
 end
 
 function simulation(lfvec, days)
@@ -19,4 +19,3 @@ end
 
 @show simulation(parseinput(), 80)
 @show simulation(parseinput(), 256)
-

@@ -112,12 +112,11 @@ function printimage(img)
         end
         println()
     end
-    println("\n")
+    return println("\n")
 end
 
 function applyalgo(a, algo, x, y)
-    return algo[evalpoly(2, [a[x + 1, y + 1], a[x + 1, y], a[x + 1, y - 1], a[x, y + 1],
-       a[x, y], a[x, y - 1], a[x - 1, y + 1], a[x - 1, y], a[x - 1, y - 1]]) + 1]
+    return algo[evalpoly(2, [a[x + 1, y + 1], a[x + 1, y], a[x + 1, y - 1], a[x, y + 1], a[x, y], a[x, y - 1], a[x - 1, y + 1], a[x - 1, y], a[x - 1, y - 1]]) + 1]
 end
 
 function Base.iterate(imi::ImageIter, state=(zeros(Int, 1, 1), 0))
@@ -127,7 +126,7 @@ function Base.iterate(imi::ImageIter, state=(zeros(Int, 1, 1), 0))
     border = first(imi.algo) != 0 && isodd(last(state))
     nextimage = zeros(Int, size(first(state)) .+ 2)
     workimage = zeros(Int, size(first(state)) .+ 4)
-    workimage[begin+2:end-2, begin+2:end-2] .= first(state)
+    workimage[(begin + 2):(end - 2), (begin + 2):(end - 2)] .= first(state)
     workimage[[1, 2, end - 1, end], :] .= border
     workimage[:, [1, 2, end - 1, end]] .= border
     for c in CartesianIndices(nextimage)
@@ -160,4 +159,3 @@ end
 part = day20()
 println("Part 1: ", part[1])  # 5231
 println("Part 2: ", part[2])  # 14729
-

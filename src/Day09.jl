@@ -7,16 +7,30 @@ function day9()
     part = [0, 0]
     function localmin(row, col)
         x = mat[row, col]
-        return (row > 1 && mat[row - 1, col] <= x) || (row < size(mat)[1] && mat[row + 1, col] <= x) ||
-           (col > 1 && mat[row, col - 1] <= x) || (col < size(mat)[2] && mat[row, col + 1] <= x) ?
-           false : true
+        return if (row > 1 && mat[row - 1, col] <= x) ||
+            (row < size(mat)[1] && mat[row + 1, col] <= x) ||
+            (col > 1 && mat[row, col - 1] <= x) ||
+            (col < size(mat)[2] && mat[row, col + 1] <= x)
+            false
+        else
+            true
+        end
     end
-    minima = [(row, col) for col in 1:size(mat)[2], row in 1:size(mat)[1] if localmin(row, col)]
+    minima = [
+        (row, col) for col in 1:size(mat)[2], row in 1:size(mat)[1] if localmin(row, col)
+    ]
     part[1] = sum(mat[p[1], p[2]] + 1 for p in minima)
 
-    basins = Vector{Tuple{Int, Int}}[]
-    surround(row, col) = filter(p -> 1 <= p[1] <= size(mat)[1] && 1 <= p[2] <= size(mat)[2] &&
-       mat[p[1], p[2]] != 9, [(row - 1, col), (row + 1, col), (row, col -1), (row, col +1)])
+    basins = Vector{Tuple{Int,Int}}[]
+    function surround(row, col)
+        return filter(
+            p ->
+                1 <= p[1] <= size(mat)[1] &&
+                    1 <= p[2] <= size(mat)[2] &&
+                    mat[p[1], p[2]] != 9,
+            [(row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1)],
+        )
+    end
     for t in minima
         newbasinlen, newbasin = 0, [t]
         while newbasinlen < length(newbasin)
@@ -27,9 +41,9 @@ function day9()
         end
         push!(basins, newbasin)
     end
-    part[2] = prod(sort([length(b) for b in basins])[end-2:end])
+    part[2] = prod(sort([length(b) for b in basins])[(end - 2):end])
     println("Part 1:", part[1])
-    println("Part 2:", part[2])
+    return println("Part 2:", part[2])
 end
 
 day9()

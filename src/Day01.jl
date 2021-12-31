@@ -2003,10 +2003,14 @@ input1 = map(s -> parse(Int, s), split("""
 7181
 """))
 
-increases(arr) = count(arr[i + 1] > arr[i] for i in 1:length(arr)-1)
+increases(arr) = count(arr[i + 1] > arr[i] for i in 1:(length(arr) - 1))
 
 @show inc1 = increases(input1) # 1477
 
-slidingincreases(arr) = count(sum(arr[i+1:i+3]) > sum(arr[i:i+2]) for i in 1:length(arr)-3)
+function slidingincreases(arr)
+    return count(
+        sum(arr[(i + 1):(i + 3)]) > sum(arr[i:(i + 2)]) for i in 1:(length(arr) - 3)
+    )
+end
 
 @show inc2 = slidingincreases(input1) # 1523

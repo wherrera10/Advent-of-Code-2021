@@ -1,10 +1,10 @@
 using BenchmarkTools
 
 """target area: x=217..240, y=-126..-69"""
-function day17(tx1 = 217, ty1 = -126, tx2 = 240, ty2 = -69)
+function day17(tx1=217, ty1=-126, tx2=240, ty2=-69)
     part = [0, 0]
-    maxtuple, yfail = Tuple{Int, Int, Int}[], min(ty1, ty2)
-    for i in isqrt(2tx1):tx2, j in ty1:-ty1-1
+    maxtuple, yfail = Tuple{Int,Int,Int}[], min(ty1, ty2)
+    for i in isqrt(2tx1):tx2, j in ty1:(-ty1 - 1)
         x, y, xvel, yvel, maxy, success = 0, 0, i, j, 0, false
         for t in 1:1000
             x += xvel
@@ -31,4 +31,3 @@ println("Part 1: ", part[1])
 println("Part 2: ", part[2])
 
 @btime day17()
-

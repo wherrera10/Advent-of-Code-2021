@@ -11,17 +11,33 @@ function day24()
         op = popfirst!(s)
         a, b, n = "", "", -1
         if length(s) == 2
-                a, b = s[1], s[2]
+            a, b = s[1], s[2]
         else
-                a = s[1]
+            a = s[1]
         end
-        idx1 = a == "w" ? 1 : a == "x" ? 2 : a == "y" ? 3 : 4
-        idx2 = b == "w" ? 1 : b == "x" ? 2 : b == "y" ? 3 : (b == "z" ? 4 : -1)
+        idx1 = if a == "w"
+            1
+        elseif a == "x"
+            2
+        elseif a == "y"
+            3
+        else
+            4
+        end
+        idx2 = if b == "w"
+            1
+        elseif b == "x"
+            2
+        elseif b == "y"
+            3
+        else
+            (b == "z" ? 4 : -1)
+        end
         if idx2 < 0 && idx1 != 1
             n = parse(Int, b)
         end
         if op == "inp"
-            d = Dict{Vector{Int}, Vector{Int}}()
+            d = Dict{Vector{Int},Vector{Int}}()
             for (reg, (mn, mx)) in rstates
                 (w, x, y, z) = reg
                 k = [0, x, y, z]

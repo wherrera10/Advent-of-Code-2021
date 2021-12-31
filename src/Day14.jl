@@ -2,15 +2,15 @@ using BenchmarkTools
 
 struct Polymer
     init::String
-    rules::Dict{String, Tuple{String, String}}
+    rules::Dict{String,Tuple{String,String}}
 end
 
-function Base.iterate(p::Polymer, state=Dict{String, Int}())
+function Base.iterate(p::Polymer, state=Dict{String,Int}())
     if isempty(state)
-        state = Dict(p.init[i:i+1] => 1 for i in 1:length(p.init)-1)
+        state = Dict(p.init[i:(i + 1)] => 1 for i in 1:(length(p.init) - 1))
         state[p.init[end:end]] = 1
     end
-    tmpdict = Dict{String, Int}()
+    tmpdict = Dict{String,Int}()
     for (k, v) in state
         if haskey(p.rules, k)
             tmpdict[first(p.rules[k])] = get!(tmpdict, first(p.rules[k]), 0) + v
@@ -31,8 +31,11 @@ end
 function day14()
     part = [0, 0]
     lines = strip.(readlines("AoCdata/AoC_2021_day14.txt"))
-    template, rulelines = lines[begin], lines[begin+2:end]
-    rules = Dict(s[begin:begin+1] => (s[begin]*s[end], s[end]* s[begin+1]) for s in rulelines)
+    template, rulelines = lines[begin], lines[(begin + 2):end]
+    rules = Dict(
+        s[begin:(begin + 1)] => (s[begin] * s[end], s[end] * s[begin + 1]) for
+        s in rulelines
+    )
 
     poly = Polymer(template, rules)
     for (i, diff) in enumerate(poly)
