@@ -27,7 +27,9 @@ function day11()
         while any(mat .> 9)
             for c in CartesianIndices(mat)
                 if mat[c] > 9
-                    for k in max(1,c[1]-1):min(c[1]+1,nrows), l in max(c[2]-1,1):min(c[2]+1,ncols)
+                    for k in max(1, c[1] - 1):min(c[1] + 1, nrows),
+                        l in max(c[2] - 1, 1):min(c[2] + 1, ncols)
+
                         if mat[k, l] > 0
                             mat[k, l] += 1
                         end

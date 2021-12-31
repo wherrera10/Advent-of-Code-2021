@@ -7,13 +7,17 @@ function day10()
         rights = Char[]
         for c in line
             if c == '('
-                push!(rights, ')'); continue
+                push!(rights, ')')
+                continue
             elseif c == '['
-                push!(rights, ']'); continue
+                push!(rights, ']')
+                continue
             elseif c == '{'
-                push!(rights, '}'); continue
+                push!(rights, '}')
+                continue
             elseif c == '<'
-                push!(rights, '>'); continue
+                push!(rights, '>')
+                continue
             else
                 if isempty(rights) || c != rights[end]
                     part[1] += vals[findfirst(==(c), rightop)]
@@ -23,7 +27,10 @@ function day10()
                 end
             end
         end
-        !corrupted && push!(scores, reduce((x, y) -> 5x + findfirst(==(y), rightop), reverse(rights), init=0))
+        !corrupted && push!(
+            scores,
+            reduce((x, y) -> 5x + findfirst(==(y), rightop), reverse(rights); init=0),
+        )
     end
     part[2] = sort(scores)[(length(scores) + 1) ÷ 2]
     return part

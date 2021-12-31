@@ -22,7 +22,7 @@ function dijkstra_digraph(mat, nrows, ncols, startindex, endindex)
 end
 
 function day15()
-    part = [0,0]
+    part = [0, 0]
     lines = filter(!isempty, strip.(readlines("AoCdata/AoC_2021_day15.txt")))
     nrows, ncols = length(lines), length(first(lines))
     mat = zeros(Int, nrows, ncols)
@@ -33,8 +33,12 @@ function day15()
 
     mat2 = zeros(Int, ncols * 5, nrows * 5)
     for c in CartesianIndices(mat2)
-        mat2[c] = mod1(mat[mod1(c[1], nrows), mod1(c[2], ncols)] +
-           (c[1] - 1) ÷ nrows + (c[2] - 1) ÷ ncols, 9)
+        mat2[c] = mod1(
+            mat[mod1(c[1], nrows), mod1(c[2], ncols)] +
+            (c[1] - 1) ÷ nrows +
+            (c[2] - 1) ÷ ncols,
+            9,
+        )
     end
     part[2] = dijkstra_digraph(mat2, nrows * 5, ncols * 5, 1, length(mat2))
 
@@ -44,4 +48,3 @@ end
 part = day15()
 println("Part 1: ", part[1])
 println("Part 2: ", part[2])
-

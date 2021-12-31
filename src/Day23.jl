@@ -1,8 +1,8 @@
-data23= """
-...........
-##D#A#C#C##
-##D#A#B#B##
-"""
+data23 = """
+ ...........
+ ##D#A#C#C##
+ ##D#A#B#B##
+ """
 
 insertstring = """##D#C#B#A##\n##D#B#A#C##"""
 
@@ -15,21 +15,21 @@ targetstring = """
 C = CartesianIndex{2}
 
 function printmat(m)
-    println("#" ^ 13)
+    println("#"^13)
     for i in 1:size(m, 1)
         println("#", join(m[i, begin:end]), "#")
     end
-    println("#" ^ 13, "\n")
+    return println("#"^13, "\n")
 end
 
-function day23(part1 = true)
+function day23(part1=true)
     nrows, ncols = 3, 11
     nrgmax = part1 ? 19_100 : 48_350
 
-    function readmat(s, r = nrows, c = ncols)
+    function readmat(s, r=nrows, c=ncols)
         mat = Matrix{Char}(undef, r, c)
         lines = split(s, "\n")
-        for (i, line) in enumerate(lines[begin:begin+r-1])
+        for (i, line) in enumerate(lines[begin:(begin + r - 1)])
             length(line) < c && (line = rpad(line, c))
             mat[i, :] .= collect(line)
         end
@@ -54,7 +54,7 @@ function day23(part1 = true)
         for col in [3, 5, 7, 9], row in 2:nrows
             a = mat[row, col]
             a ∉ amphitypes && continue
-            if col != destcol[a] || (row < nrows && any(mat[row+1:nrows, col] .!= a))
+            if col != destcol[a] || (row < nrows && any(mat[(row + 1):nrows, col] .!= a))
                 push!(ret, C(row, col))
             end
         end
@@ -67,8 +67,10 @@ function day23(part1 = true)
     end
     function homeready(mat, a, top=1)
         dcol = destcol[a]
-        return top < nrows && all(b -> b ∈ [a, '.'], mat[top:nrows, dcol]) &&
-           any(mat[top:nrows, dcol] .== '.') && issorted(mat[top:nrows, dcol])
+        return top < nrows &&
+               all(b -> b ∈ [a, '.'], mat[top:nrows, dcol]) &&
+               any(mat[top:nrows, dcol] .== '.') &&
+               issorted(mat[top:nrows, dcol])
     end
     function goalmove(mat, c)
         a, x, y = mat[c], c[1], c[2]
@@ -78,14 +80,16 @@ function day23(part1 = true)
         drow = findlast(mat[1:nrows, dcol] .== '.')
         drow == nothing && return nothing
         if d == 0 && homeready(mat, a, x + 1) ||
-           d != 0 && homeready(mat, a) && all(mat[1, y+d:d:dcol] .== '.') &&
-              (x == 1 || all(mat[1:x-1, y] .== '.'))
+            d != 0 &&
+           homeready(mat, a) &&
+           all(mat[1, (y + d):d:dcol] .== '.') &&
+           (x == 1 || all(mat[1:(x - 1), y] .== '.'))
             return C(drow, dcol)
         end
         return nothing
     end
 
-    function allmoves(omat = deepcopy(original))
+    function allmoves(omat=deepcopy(original))
         positions = [(omat, 0)]
         wins = Int[]
         while !isempty(positions)
@@ -111,15 +115,18 @@ function day23(part1 = true)
                 else
                     for prev in notinplace
                         a, x, y = mat[prev], prev[1], prev[2]
-                        if x > 1 && all(mat[1:x-1, y] .== '.')
+                        if x > 1 && all(mat[1:(x - 1), y] .== '.')
                             for col in [1, 2, 4, 6, 8, 10, 11]
-                                if all(mat[1, y:sign(col-y):col] .== '.')
+                                if all(mat[1, y:sign(col - y):col] .== '.')
                                     c = C(1, col)
                                     @assert mat[c] == '.' && a ∈ amphitypes
                                     newmat = deepcopy(mat)
                                     newmat[prev] = mat[c]
                                     newmat[c] = mat[prev]
-                                    push!(newpositions, (newmat, cost + movecost(mat, prev, c)))
+                                    push!(
+                                        newpositions,
+                                        (newmat, cost + movecost(mat, prev, c)),
+                                    )
                                 end
                             end
                         end
@@ -132,11 +139,9 @@ function day23(part1 = true)
     end
 
     return allmoves()
-
 end
 
 part = [day23(), day23(false)]
 
 println("Part 1: ", part[1]) # 19046
 println("Part 2: ", part[2]) # 47484
-
