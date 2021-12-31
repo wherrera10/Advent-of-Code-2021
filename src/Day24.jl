@@ -9,7 +9,7 @@ function day24()
         # println("Parsing line $i of ", length(lines), ", nstates is ", length(rstates))
         s = split(strip(line), r"\s+")
         op = popfirst!(s)
-        a, b = "", ""
+        a, b, n = "", "", -1
         if length(s) == 2
                 a, b = s[1], s[2]
         else
@@ -17,6 +17,9 @@ function day24()
         end
         idx1 = a == "w" ? 1 : a == "x" ? 2 : a == "y" ? 3 : 4
         idx2 = b == "w" ? 1 : b == "x" ? 2 : b == "y" ? 3 : (b == "z" ? 4 : -1)
+        if idx2 < 0 && idx1 != 1
+            n = parse(Int, b)
+        end
         if op == "inp"
             d = Dict{Vector{Int}, Vector{Int}}()
             for (reg, (mn, mx)) in rstates
@@ -41,24 +44,24 @@ function day24()
             rstates = newstates
         elseif op == "add"
             for i in eachindex(rstates)
-                rstates[i][1][idx1] += idx2 > 0 ? rstates[i][1][idx2] : parse(Int, b)
+                rstates[i][1][idx1] += idx2 > 0 ? rstates[i][1][idx2] : n
             end
         elseif op == "mul"
             for i in eachindex(rstates)
-                rstates[i][1][idx1] *= idx2 > 0 ? rstates[i][1][idx2] : parse(Int, b)
+                rstates[i][1][idx1] *= idx2 > 0 ? rstates[i][1][idx2] : n
             end
         elseif op == "div"
             for i in eachindex(rstates)
-                rstates[i][1][idx1] ÷= idx2 > 0 ? rstates[i][1][idx2] : parse(Int, b)
+                rstates[i][1][idx1] ÷= idx2 > 0 ? rstates[i][1][idx2] : n
             end
         elseif op == "mod"
             for i in eachindex(rstates)
-                rstates[i][1][idx1] %= idx2 > 0 ? rstates[i][1][idx2] : parse(Int, b)
+                rstates[i][1][idx1] %= idx2 > 0 ? rstates[i][1][idx2] : n
             end
         elseif op == "eql"
             for i in eachindex(rstates)
                 p = rstates[i][1][idx1]
-                q = idx2 > 0 ? rstates[i][1][idx2] : parse(Int, b)
+                q = idx2 > 0 ? rstates[i][1][idx2] : n
                 rstates[i][1][idx1] = p == q
             end
         else
@@ -77,6 +80,5 @@ println("Part 2: ", part[2])
 #=
 Part 1: 92928914999991
 Part 2: 91811211611981
-  608.204 ms (2745075 allocations: 236.98 MiB)
+  298.526 ms (2745075 allocations: 236.98 MiB)
 =#
-
