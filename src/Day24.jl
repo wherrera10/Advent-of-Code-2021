@@ -1,42 +1,26 @@
-using BenchmarkTools
+const registernames = ["w", "x", "y", "z"]
+struct AsmLine
+    op::String
+    idx1::Int
+    idx2::Int
+    n::Int
+    function AsmLine(str::String)
+        s = split(strip(str), r"\s+")
+        b = length(s) > 2 ? (s[3] in registernames ? s[3] : tryparse(Int, s[3])) : nothing
+        idx1 = findfirst(registernames .== s[2])
+        idx2 = (b isa AbstractString) ? findfirst(registernames .== b) : -1
+        n = b isa Integer ? b : typemax(Int)
+        return new(s[1], idx1, idx2, n)
+    end
+end
 
 """ Speedup: if we fail to pop a 26-multiplier due to bad input, z becomes large, so drop those"""
-function day24()
-    rstates = rstates = [[[0, 0, 0, 0], [0, 0]]]
+function day24(maxz = 26^4)
+    rstates = [[[0, 0, 0, 0], [0, 0]]]
     lines = readlines("AoCdata/AoC_2021_day24.txt")
-    maxz = 26^4
     for (i, line) in enumerate(lines)
-        # println("Parsing line $i of ", length(lines), ", nstates is ", length(rstates))
-        s = split(strip(line), r"\s+")
-        op = popfirst!(s)
-        a, b, n = "", "", -1
-        if length(s) == 2
-            a, b = s[1], s[2]
-        else
-            a = s[1]
-        end
-        idx1 = if a == "w"
-            1
-        elseif a == "x"
-            2
-        elseif a == "y"
-            3
-        else
-            4
-        end
-        idx2 = if b == "w"
-            1
-        elseif b == "x"
-            2
-        elseif b == "y"
-            3
-        else
-            (b == "z" ? 4 : -1)
-        end
-        if idx2 < 0 && idx1 != 1
-            n = parse(Int, b)
-        end
-        if op == "inp"
+        asm = AsmLine(line)
+        if asm.op == "inp"
             d = Dict{Vector{Int},Vector{Int}}()
             for (reg, (mn, mx)) in rstates
                 (w, x, y, z) = reg
@@ -58,27 +42,27 @@ function day24()
                 push!(newstates, [[i, x, y, z], [mn * 10 + i, mx * 10 + i]])
             end
             rstates = newstates
-        elseif op == "add"
+        elseif asm.op == "add"
             for i in eachindex(rstates)
-                rstates[i][1][idx1] += idx2 > 0 ? rstates[i][1][idx2] : n
+                rstates[i][1][asm.idx1] += asm.idx2 > 0 ? rstates[i][1][asm.idx2] : asm.n
             end
-        elseif op == "mul"
+        elseif asm.op == "mul"
             for i in eachindex(rstates)
-                rstates[i][1][idx1] *= idx2 > 0 ? rstates[i][1][idx2] : n
+                rstates[i][1][asm.idx1] *= asm.idx2 > 0 ? rstates[i][1][asm.idx2] : asm.n
             end
-        elseif op == "div"
+        elseif asm.op == "div"
             for i in eachindex(rstates)
-                rstates[i][1][idx1] ÷= idx2 > 0 ? rstates[i][1][idx2] : n
+                rstates[i][1][asm.idx1] ÷= asm.idx2 > 0 ? rstates[i][1][asm.idx2] : asm.n
             end
-        elseif op == "mod"
+        elseif asm.op == "mod"
             for i in eachindex(rstates)
-                rstates[i][1][idx1] %= idx2 > 0 ? rstates[i][1][idx2] : n
+                rstates[i][1][asm.idx1] %= asm.idx2 > 0 ? rstates[i][1][asm.idx2] : asm.n
             end
-        elseif op == "eql"
+        elseif asm.op == "eql"
             for i in eachindex(rstates)
-                p = rstates[i][1][idx1]
-                q = idx2 > 0 ? rstates[i][1][idx2] : n
-                rstates[i][1][idx1] = p == q
+                p = rstates[i][1][asm.idx1]
+                q = asm.idx2 > 0 ? rstates[i][1][asm.idx2] : asm.n
+                rstates[i][1][asm.idx1] = p == q
             end
         else
             error("unknown op $op in line $line")
@@ -91,10 +75,3 @@ end
 part = day24()
 println("Part 1: ", part[1])
 println("Part 2: ", part[2])
-
-@btime day24()
-#=
-Part 1: 92928914999991
-Part 2: 91811211611981
-  298.526 ms (2745075 allocations: 236.98 MiB)
-=#

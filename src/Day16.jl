@@ -67,8 +67,8 @@ function day16(s)
     return part
 end
 
-part = day16(day16data)
-println("Part 1: ", part[1])
-println("Part 2: ", part[2])
+par = day16(day16data)
+println("Part 1: ", par[1])
+println("Part 2: ", par[2])
 
 @btime day16(day16data)
