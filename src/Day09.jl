@@ -43,7 +43,7 @@ function day9()
     end
     part[2] = prod(sort([length(b) for b in basins])[(end - 2):end])
     println("Part 1:", part[1])
-    return println("Part 2:", part[2])
+    println("Part 2:", part[2])
 end
 
 day9()

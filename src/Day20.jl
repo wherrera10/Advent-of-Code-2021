@@ -105,6 +105,11 @@ data20 = """
 #...#.##.##.#...#.....#..####..#.#..#.#.#.###..#.......###...#.....#...##.##...#.#####.#.#....#...##
 """
 
+struct ImageIter
+    algo::Vector{Char}
+    init::Matrix{Int}
+end
+
 function printimage(img)
     for row in eachrow(img)
         for c in collect(row)

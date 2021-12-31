@@ -1,3 +1,5 @@
+""" Advent of Code 2021 day 23, stripped puzzle input of outer # shell at start """
+
 data23 = """
  ...........
  ##D#A#C#C##
