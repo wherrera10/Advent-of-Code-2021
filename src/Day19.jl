@@ -1,78 +1,56 @@
-const Op = NTuple{9, Int}
-
+""" Day19 Advent of Code 2021 """
 function day19()
     part = [0, 0]
-    maxdist = 1000
+
     scannerblocks = split(read("AoCdata/AoC_2021_day19.txt", String), "\n\n")
     scanners = [Vector{Int}[] for _ in 1:length(scannerblocks)]
-    for (i, block) in enumerate(scannerblocks)
-        for line in strip.(split(block, "\n"))
-            !isempty(line) && line[end] != '-' && push!(scanners[i], parse.(Int, split(line, ",", limit=3)))
-        end
+    for (i, block) in enumerate(scannerblocks), line in strip.(split(block, "\n"))
+        !isempty(line) && line[end] != '-' && push!(scanners[i], parse.(Int, split(line, ",")))
     end
-    nscan, overlaps, deltas = length(scanners), Dict{Vector{Int}, Int}(), Dict{Vector{Int}, Vector{Int}}()
-    # simulate all configurations of scanner j and then look for a substantial subset of readinds between the two
+    converted, checked, distances = Set(1), Set{Int}(), Dict{Int, Tuple{Int, Int, Int}}()
+    sort!(scanners[1])
+
+    # simulate all configurations of scanner j and then look for a set of 12 between the two
     # which differ by a constant xyz vector such as [0, 0, 0].
-    for i in 1:nscan
-        print("Test $i\b\b\b\b\b\b\b\b\b")
-        mat = sort(scanners[i])
-        foundmatch = false
-        for j in i+1:nscan
-            for xsign in [1, -1], ysign in [1, -1], zsign in [1, -1], ax in ([1,2,3], [2,1,3], [3,2,1], [1,3,2], [2,3,1], [3,1,2])
-                newmat = deepcopy(scanners[j])
-                for i in eachindex(newmat)
-                    newmat[i] .*= [xsign, ysign, zsign]
-                end
-                for (i, t) in enumerate(newmat)
-                    newmat[i] .= [t[ax[1]], t[ax[2]], t[ax[3]]]
-                end
-                for b in mat, t in newmat
-                    diff = t .- b
-                    samediffs = count(newmat[n] - mat[m] == diff for n in 1:length(mat),
-                       m in 1:length(newmat))
-                    if samediffs > 11
-                        overlaps[[i, j]] = max(get(overlaps, [i, j], 0), samediffs)
-                        deltas[[i, j]] = Op(xsign, ysign, zsign, ax[1], ax[2], ax[3], 
-                           diff[1], diff[2], diff[3]])
-                        deltas[[j, i]] = Op(Op(xsign, ysign, zsign, ax[1], ax[2], ax[3], 
-                        -diff[1], -diff[2], -diff[3]]))
-                        goto gotfoundmatch
+    while length(converted) < length(scanners)
+        for i in converted
+            i in checked && continue
+            push!(checked, i)
+            mat = sort(scanners[i])
+            for j in 1:length(scanners)
+                j ∈ converted && continue
+                print("Compare $i to $j...\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b")
+                for xsign in [1, -1], ysign in [1, -1], zsign in [1, -1], ax in ([1,2,3], [2,1,3], [3,2,1], [1,3,2], [2,3,1], [3,1,2])
+                    newmat = deepcopy(scanners[j])
+                    for i in eachindex(newmat)
+                        newmat[i] .*= [xsign, ysign, zsign]
+                    end
+                    for (i, t) in enumerate(newmat)
+                        newmat[i] .= [t[ax[1]], t[ax[2]], t[ax[3]]]
+                    end
+                    for b in mat, t in newmat
+                        diff = t .- b
+                        minindex = min(length(mat), length(newmat))
+                        samediffs = count(newmat[n] - mat[m] == diff for n in 1:minindex, m in 1:minindex)
+                        if samediffs > 4
+                            push!(converted, j)
+                            scanners[j] .= [p .-= diff for p in sort!(newmat)]
+                            distances[j] = (diff[1], diff[2], diff[3])
+                            break
+                        end
                     end
                 end
             end
         end
-        label gotfoundmatch
     end
 
-    distances = Dict(1 => [0, 0, 0])
-    while any(i -> !haskey(distances, i), 1:nscan)
-        for (k, v) in distances
-            for (p, delta) in deltas
-                haskey(distances, p[2]) && continue
-                if k == p[1]
-                    distances[p[2]] = v .+ delta
-                end
-            end
-        end
-    end
-
-    # normalize beacon measures versus scanner 0
-    for (k, v) in distances
-        for i in eachindex(scanners[k])
-            scanners[k][i] .-= v
-        end
-    end
-    # number of beacons = total readings - number of overlapping readings + number of doublecounts
-    allmeasures = vcat(scanners)
-    overlappings = length(overlaps)
-    part[1] = length(unique(allmeasures)) - overlappings
-@show length(allmeasures), length(unique(allmeasures)), overlappings, sum(values(overlaps))
-    manhat(s1, s2) = sum(abs.(distances[s2] - distances[s1]))
-    part[2] = maximum(manhat(i, j) for i in 1:nscan, j in 1:nscan)
+    part[1] = length(unique(reduce(vcat, scanners)))
+    part[2] = maximum(sum(abs.(d1 .- d2)) for d1 in values(distances), d2 in values(distances))
 
     return part
 end
 
 part = day19()
-println("\nPart 1: ", part[1])  # 425
-println("Part 2: ", part[2])    # 13354
+
+println("\nPart 1: ", part[1]) # 425
+println("Part 2: ", part[2]) # 13354
